@@ -33,3 +33,12 @@
 
 # Debug files
 *.vscode
+
+# Tasks files
+*.pdf
+*.doc
+*.docx
+
+#folders
+
+__pycache__
