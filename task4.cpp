@@ -1,53 +1,47 @@
 #include <iostream>
 #include <vector>
+#include <numeric>
 #include <deque>
+#include <algorithm>
 
 using namespace std;
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
     int n, m;
     cin >> n >> m;
-
-    vector<long long> numbers(n);
+    std::vector<long long> a(n);
     for (int i = 0; i < n; ++i) {
-        cin >> numbers[i];
+        cin >> a[i];
     }
-
-    // Префиксные суммы: prefix[i] — сумма первых i чисел
-    vector<long long> prefix(n + 1);
+    // Префиксные суммы для быстрого подсчёта сумм отрезков
+    std::vector<long long> prefix_sum(n + 1, 0);
     for (int i = 0; i < n; ++i) {
-        prefix[i + 1] = prefix[i] + numbers[i];
+        prefix_sum[i + 1] = prefix_sum[i] + a[i];
     }
-
-    vector<long long> dp(n + 1);      // dp[i] — макс. разница (свои - чужие очки), начиная с позиции i
-    vector<long long> value(n + 1);   // value[i] = prefix[i] - dp[i]
-
-    deque<int> dq;
-
+    // dp[i] — максимальная разница очков, которую может получить текущий игрок, начиная с позиции i
+    std::vector<long long> dp(n + 1);
+    std::vector<long long> value(n + 1);
+    std::deque<int> dq;
     dp[n] = 0;
-    value[n] = prefix[n];
+    value[n] = prefix_sum[n] - dp[n];
     dq.push_back(n);
-
     for (int i = n - 1; i >= 0; --i) {
-        // Удаляем устаревшие индексы из окна [i+1, i+m]
+        // Поддерживаем окно [i+1, i+m]
         while (!dq.empty() && dq.front() > i + m) {
             dq.pop_front();
         }
-
-        // Выбираем лучший ход
-        dp[i] = value[dq.front()] - prefix[i];
-        value[i] = prefix[i] - dp[i];
-
-        // Поддерживаем убывающий порядок в dq
+        // Оптимальный ход — максимум value[j] в окне
+        dp[i] = value[dq.front()] - prefix_sum[i];
+        value[i] = prefix_sum[i] - dp[i];
+        // Поддерживаем убывание value в деке
         while (!dq.empty() && value[dq.back()] <= value[i]) {
             dq.pop_back();
         }
         dq.push_back(i);
     }
-
-    cout << (dp[0] > 0 ? 1 : 0) << '\n';
+    // Если dp[0] > 0, первый игрок выигрывает
+    cout << (dp[0] > 0 ? 1 : 0) << endl;
     return 0;
 }
