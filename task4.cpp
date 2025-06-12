@@ -1,47 +1,52 @@
 #include <iostream>
-#include <vector>
-#include <numeric>
-#include <deque>
+#include <string>
 #include <algorithm>
+#include <climits>
+#include <random>
+#include <cmath>
 
 using namespace std;
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    int n, m;
+    int n;
+    int m;
+    vector<int> chisla;
+
+    cout << "Введите N и M через пробел: ";
     cin >> n >> m;
-    std::vector<long long> a(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> a[i];
+    if (n < 0) {
+        n = abs(n);
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<> dist(5, 50000);
+        for (int i = 0; i < n; i++) {
+            chisla.push_back(dist(gen));
+        }
+        cout << "Случайно сгенерированный список:";
+        for (const auto& i : chisla) {
+            cout << " " << i;
+        }
+        cout << "\n";
+    } else {
+        for (int i = 0; i < n; i++) {
+            int z;
+            cout << "Введите число №" << i+1 << " > ";
+            cin >> z;
+            chisla.push_back(z);
+        }
     }
-    // Префиксные суммы для быстрого подсчёта сумм отрезков
-    std::vector<long long> prefix_sum(n + 1, 0);
-    for (int i = 0; i < n; ++i) {
-        prefix_sum[i + 1] = prefix_sum[i] + a[i];
-    }
-    // dp[i] — максимальная разница очков, которую может получить текущий игрок, начиная с позиции i
-    std::vector<long long> dp(n + 1);
-    std::vector<long long> value(n + 1);
-    std::deque<int> dq;
+
+    vector<int> dp(n+1);
     dp[n] = 0;
-    value[n] = prefix_sum[n] - dp[n];
-    dq.push_back(n);
-    for (int i = n - 1; i >= 0; --i) {
-        // Поддерживаем окно [i+1, i+m]
-        while (!dq.empty() && dq.front() > i + m) {
-            dq.pop_front();
+    for (int i = n-1; i >= 0; --i) {
+        dp[i] = INT_MIN;
+        int sum = 0;
+        for (int k = 1; k <= m && i + k <= n; ++k) {
+            sum += chisla[i + k - 1];
+            dp[i] = max(dp[i], sum - dp[i + k]);
         }
-        // Оптимальный ход — максимум value[j] в окне
-        dp[i] = value[dq.front()] - prefix_sum[i];
-        value[i] = prefix_sum[i] - dp[i];
-        // Поддерживаем убывание value в деке
-        while (!dq.empty() && value[dq.back()] <= value[i]) {
-            dq.pop_back();
-        }
-        dq.push_back(i);
     }
-    // Если dp[0] > 0, первый игрок выигрывает
+    
     cout << (dp[0] > 0 ? 1 : 0) << endl;
-    return 0;
+
 }
