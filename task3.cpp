@@ -1,52 +1,73 @@
 #include <iostream>
-#include <string>
-#include <algorithm>
-#include <climits>
-#include <random>
 #include <cmath>
+#include <string>
+#include <numeric>
 
 using namespace std;
 
+string sokr(int chisl, int znam) {
+    int g = gcd(chisl, znam);
+    return to_string(chisl / g) + "/" + to_string(znam / g);
+}
+
+string calc_sum(int a, int b) {
+    if (b == 1) return "infinity";
+
+    if (a == 1) {
+        int znam = (b - 1) * (b - 1);
+        return sokr(b, znam);
+    }
+
+    if (a == 2) {
+        int chisl = b * (b + 1);
+        int znam = (b - 1) * (b - 1) * (b - 1);
+        return sokr(chisl, znam);
+    }
+
+    if (a == 3) {
+        int num = b * (b*b + 4*b + 1);
+        int den = (b-1)*(b-1)*(b-1)*(b-1);
+        return sokr(num, den);
+    }
+
+
+    double sum = 0;
+    int max_terms = 10000;
+    double prev_sum = 0;
+    bool converged = false;
+
+    for (int n = 1; n <= max_terms; n++) {
+        sum += pow(n, a) / pow(b, n);
+        if (fabs(sum - prev_sum) < 1e-10) {
+            converged = true;
+            break;
+        }
+        prev_sum = sum;
+    }
+
+    if (!converged) {return "irrational";}
+
+    if (fabs(sum - round(sum)) < 1e-10) {
+        return to_string(static_cast<int>(round(sum))) + "/1";
+    }
+
+    for (int denom = 2; denom <= 1000; ++denom) {
+        double numerator = sum * denom;
+        if (fabs(numerator - round(numerator)) < 1e-10) {
+            return sokr(static_cast<int>(round(numerator)), denom);
+        }
+    }
+    return "irrational";
+}
+
 int main() {
-    int n;
-    int m;
-    vector<int> chisla;
-
-    cout << "Введите N и M через пробел: ";
-    cin >> n >> m;
-    if (n < 0) {
-        n = abs(n);
-        random_device rd;
-        mt19937 gen(rd());
-        uniform_int_distribution<> dist(5, 50000);
-        for (int i = 0; i < n; i++) {
-            chisla.push_back(dist(gen));
-        }
-        cout << "Случайно сгенерированный список:";
-        for (const auto& i : chisla) {
-            cout << " " << i;
-        }
-        cout << "\n";
-    } else {
-        for (int i = 0; i < n; i++) {
-            int z;
-            cout << "Введите число №" << i+1 << " > ";
-            cin >> z;
-            chisla.push_back(z);
-        }
+    int a, b;
+    cout << "Введите значения a и b через пробел: ";
+    while (true) {
+        cin >> a >> b;
+        if (a < 1 || a > 10 || b < 1 || b > 10) {
+            cout << "Числа должны быть в диапазоне от 1 до 10!" << endl;
+        } else {break;}
     }
-
-    vector<int> dp(n+1);
-    dp[n] = 0;
-    for (int i = n-1; i >= 0; --i) {
-        dp[i] = INT_MIN;
-        int sum = 0;
-        for (int k = 1; k <= m && i + k <= n; ++k) {
-            sum += chisla[i + k - 1];
-            dp[i] = max(dp[i], sum - dp[i + k]);
-        }
-    }
-    
-    cout << (dp[0] > 0 ? 1 : 0) << endl;
-
+    cout << "Результат: " << calc_sum(a, b) << endl;
 }

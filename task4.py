@@ -1,23 +1,29 @@
+import random
+
 def main():
-    n, m = map(int, input().split())
-    a = list(map(int, input().split()))
-    prefix_sum = [0] * (n + 1)
-    for i in range(n):
-        prefix_sum[i + 1] = prefix_sum[i] + a[i]
+    n, m = map(int, input("Введите N и M через пробел: ").split())
+    chisla = []
+
+    if n < 0:
+        n = abs(n)
+        for i in range(n):
+            chisla.append(random.randint(5, 50000))
+        print("Случайно сгенерированный список:", chisla)
+    else:
+        for i in range(n):
+            z = int(input(f"Введите число №{i+1} > "))
+            chisla.append(z)
+
     dp = [0] * (n + 1)
-    value = [0] * (n + 1)
-    dq = []
     dp[n] = 0
-    value[n] = prefix_sum[n] - dp[n]
-    dq.append(n)
     for i in range(n - 1, -1, -1):
-        while dq and dq[0] > i + m:
-            dq.pop(0)
-        dp[i] = value[dq[0]] - prefix_sum[i]
-        value[i] = prefix_sum[i] - dp[i]
-        while dq and value[dq[-1]] <= value[i]:
-            dq.pop()
-        dq.append(i)
+        dp[i] = -2147483648
+        sum = 0
+        for k in range(1, m + 1):
+            if i + k <= n:
+                sum += chisla[i + k - 1]
+                dp[i] = max(dp[i], sum - dp[i + k])
+
     print(1 if dp[0] > 0 else 0)
 
 if __name__ == "__main__":
