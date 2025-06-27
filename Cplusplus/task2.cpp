@@ -6,11 +6,11 @@
 #include <map>
 #include <iomanip>
 
-//добавить задавание битности числа
 using namespace std;
 
 typedef uint64_t bint;
 
+//добавить задавание битности числа
 bint W;
 const int N = 500;
 vector<bool> resheto(N, true);

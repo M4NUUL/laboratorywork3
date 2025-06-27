@@ -34,6 +34,11 @@ int main() {
             cin >> z;
             chisla.push_back(z);
         }
+        for (int i = 0, out = 0; i < n; i++)
+        {
+            out = chisla[i];
+            cout << "Число " << i + 1 << out << endl;;
+        }
     }
 
     vector<int> dp(n+1);
