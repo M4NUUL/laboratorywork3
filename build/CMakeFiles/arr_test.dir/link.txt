@@ -1,0 +1,1 @@
+/usr/bin/c++  --coverage  --coverage CMakeFiles/arr_test.dir/tests/arr_test.cpp.o -o arr_test  libDataStructures.a lib/libgtest.a lib/libgtest_main.a lib/libgtest.a 

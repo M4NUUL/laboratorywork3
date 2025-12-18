@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_cleaned.info - src/colorprint.cc</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - colorprint.cc<span style="font-size: 80%;"> (source / <a href="colorprint.cc.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_cleaned.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryMed">77.6&nbsp;%</td>
+            <td class="headerCovTableEntry">58</td>
+            <td class="headerCovTableEntry">45</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2025-11-21 19:45:54</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">6</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : // Copyright 2015 Google Inc. All rights reserved.</span>
+<span id="L2"><span class="lineNum">       2</span>              : //</span>
+<span id="L3"><span class="lineNum">       3</span>              : // Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span id="L4"><span class="lineNum">       4</span>              : // you may not use this file except in compliance with the License.</span>
+<span id="L5"><span class="lineNum">       5</span>              : // You may obtain a copy of the License at</span>
+<span id="L6"><span class="lineNum">       6</span>              : //</span>
+<span id="L7"><span class="lineNum">       7</span>              : //     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span id="L8"><span class="lineNum">       8</span>              : //</span>
+<span id="L9"><span class="lineNum">       9</span>              : // Unless required by applicable law or agreed to in writing, software</span>
+<span id="L10"><span class="lineNum">      10</span>              : // distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span id="L11"><span class="lineNum">      11</span>              : // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span id="L12"><span class="lineNum">      12</span>              : // See the License for the specific language governing permissions and</span>
+<span id="L13"><span class="lineNum">      13</span>              : // limitations under the License.</span>
+<span id="L14"><span class="lineNum">      14</span>              : </span>
+<span id="L15"><span class="lineNum">      15</span>              : #include &quot;colorprint.h&quot;</span>
+<span id="L16"><span class="lineNum">      16</span>              : </span>
+<span id="L17"><span class="lineNum">      17</span>              : #include &lt;cstdarg&gt;</span>
+<span id="L18"><span class="lineNum">      18</span>              : #include &lt;cstdio&gt;</span>
+<span id="L19"><span class="lineNum">      19</span>              : #include &lt;cstdlib&gt;</span>
+<span id="L20"><span class="lineNum">      20</span>              : #include &lt;cstring&gt;</span>
+<span id="L21"><span class="lineNum">      21</span>              : #include &lt;memory&gt;</span>
+<span id="L22"><span class="lineNum">      22</span>              : #include &lt;string&gt;</span>
+<span id="L23"><span class="lineNum">      23</span>              : </span>
+<span id="L24"><span class="lineNum">      24</span>              : #include &quot;check.h&quot;</span>
+<span id="L25"><span class="lineNum">      25</span>              : #include &quot;internal_macros.h&quot;</span>
+<span id="L26"><span class="lineNum">      26</span>              : </span>
+<span id="L27"><span class="lineNum">      27</span>              : #ifdef BENCHMARK_OS_WINDOWS</span>
+<span id="L28"><span class="lineNum">      28</span>              : #include &lt;io.h&gt;</span>
+<span id="L29"><span class="lineNum">      29</span>              : #include &lt;windows.h&gt;</span>
+<span id="L30"><span class="lineNum">      30</span>              : #else</span>
+<span id="L31"><span class="lineNum">      31</span>              : #include &lt;unistd.h&gt;</span>
+<span id="L32"><span class="lineNum">      32</span>              : #endif  // BENCHMARK_OS_WINDOWS</span>
+<span id="L33"><span class="lineNum">      33</span>              : </span>
+<span id="L34"><span class="lineNum">      34</span>              : namespace benchmark {</span>
+<span id="L35"><span class="lineNum">      35</span>              : namespace {</span>
+<span id="L36"><span class="lineNum">      36</span>              : #ifdef BENCHMARK_OS_WINDOWS</span>
+<span id="L37"><span class="lineNum">      37</span>              : typedef WORD PlatformColorCode;</span>
+<span id="L38"><span class="lineNum">      38</span>              : #else</span>
+<span id="L39"><span class="lineNum">      39</span>              : typedef const char* PlatformColorCode;</span>
+<span id="L40"><span class="lineNum">      40</span>              : #endif</span>
+<span id="L41"><span class="lineNum">      41</span>              : </span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC tlaBgGNC">         324 : PlatformColorCode GetPlatformColorCode(LogColor color) {</span></span>
+<span id="L43"><span class="lineNum">      43</span>              : #ifdef BENCHMARK_OS_WINDOWS</span>
+<span id="L44"><span class="lineNum">      44</span>              :   switch (color) {</span>
+<span id="L45"><span class="lineNum">      45</span>              :     case COLOR_RED:</span>
+<span id="L46"><span class="lineNum">      46</span>              :       return FOREGROUND_RED;</span>
+<span id="L47"><span class="lineNum">      47</span>              :     case COLOR_GREEN:</span>
+<span id="L48"><span class="lineNum">      48</span>              :       return FOREGROUND_GREEN;</span>
+<span id="L49"><span class="lineNum">      49</span>              :     case COLOR_YELLOW:</span>
+<span id="L50"><span class="lineNum">      50</span>              :       return FOREGROUND_RED | FOREGROUND_GREEN;</span>
+<span id="L51"><span class="lineNum">      51</span>              :     case COLOR_BLUE:</span>
+<span id="L52"><span class="lineNum">      52</span>              :       return FOREGROUND_BLUE;</span>
+<span id="L53"><span class="lineNum">      53</span>              :     case COLOR_MAGENTA:</span>
+<span id="L54"><span class="lineNum">      54</span>              :       return FOREGROUND_BLUE | FOREGROUND_RED;</span>
+<span id="L55"><span class="lineNum">      55</span>              :     case COLOR_CYAN:</span>
+<span id="L56"><span class="lineNum">      56</span>              :       return FOREGROUND_BLUE | FOREGROUND_GREEN;</span>
+<span id="L57"><span class="lineNum">      57</span>              :     case COLOR_WHITE:  // fall through to default</span>
+<span id="L58"><span class="lineNum">      58</span>              :     default:</span>
+<span id="L59"><span class="lineNum">      59</span>              :       return 0;</span>
+<span id="L60"><span class="lineNum">      60</span>              :   }</span>
+<span id="L61"><span class="lineNum">      61</span>              : #else</span>
+<span id="L62"><span class="lineNum">      62</span> <span class="tlaGNC">         324 :   switch (color) {</span></span>
+<span id="L63"><span class="lineNum">      63</span> <span class="tlaGNC">          17 :     case COLOR_RED:</span></span>
+<span id="L64"><span class="lineNum">      64</span> <span class="tlaGNC">          17 :       return &quot;1&quot;;</span></span>
+<span id="L65"><span class="lineNum">      65</span> <span class="tlaGNC">          84 :     case COLOR_GREEN:</span></span>
+<span id="L66"><span class="lineNum">      66</span> <span class="tlaGNC">          84 :       return &quot;2&quot;;</span></span>
+<span id="L67"><span class="lineNum">      67</span> <span class="tlaGNC">          67 :     case COLOR_YELLOW:</span></span>
+<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">          67 :       return &quot;3&quot;;</span></span>
+<span id="L69"><span class="lineNum">      69</span> <span class="tlaUNC tlaBgUNC">           0 :     case COLOR_BLUE:</span></span>
+<span id="L70"><span class="lineNum">      70</span> <span class="tlaUNC">           0 :       return &quot;4&quot;;</span></span>
+<span id="L71"><span class="lineNum">      71</span> <span class="tlaUNC">           0 :     case COLOR_MAGENTA:</span></span>
+<span id="L72"><span class="lineNum">      72</span> <span class="tlaUNC">           0 :       return &quot;5&quot;;</span></span>
+<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC tlaBgGNC">          67 :     case COLOR_CYAN:</span></span>
+<span id="L74"><span class="lineNum">      74</span> <span class="tlaGNC">          67 :       return &quot;6&quot;;</span></span>
+<span id="L75"><span class="lineNum">      75</span> <span class="tlaUNC tlaBgUNC">           0 :     case COLOR_WHITE:</span></span>
+<span id="L76"><span class="lineNum">      76</span> <span class="tlaUNC">           0 :       return &quot;7&quot;;</span></span>
+<span id="L77"><span class="lineNum">      77</span> <span class="tlaGNC tlaBgGNC">          89 :     default:</span></span>
+<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">          89 :       return nullptr;</span></span>
+<span id="L79"><span class="lineNum">      79</span>              :   };</span>
+<span id="L80"><span class="lineNum">      80</span>              : #endif</span>
+<span id="L81"><span class="lineNum">      81</span>              : }</span>
+<span id="L82"><span class="lineNum">      82</span>              : </span>
+<span id="L83"><span class="lineNum">      83</span>              : }  // end namespace</span>
+<span id="L84"><span class="lineNum">      84</span>              : </span>
+<span id="L85"><span class="lineNum">      85</span> <span class="tlaGNC">        4620 : std::string FormatString(const char* msg, va_list args) {</span></span>
+<span id="L86"><span class="lineNum">      86</span>              :   // we might need a second shot at this, so pre-emptivly make a copy</span>
+<span id="L87"><span class="lineNum">      87</span>              :   va_list args_cp;</span>
+<span id="L88"><span class="lineNum">      88</span> <span class="tlaGNC">        4620 :   va_copy(args_cp, args);</span></span>
+<span id="L89"><span class="lineNum">      89</span>              : </span>
+<span id="L90"><span class="lineNum">      90</span> <span class="tlaGNC">        4620 :   std::size_t size = 256;</span></span>
+<span id="L91"><span class="lineNum">      91</span>              :   char local_buff[256];</span>
+<span id="L92"><span class="lineNum">      92</span> <span class="tlaGNC">        4620 :   auto ret = vsnprintf(local_buff, size, msg, args_cp);</span></span>
+<span id="L93"><span class="lineNum">      93</span>              : </span>
+<span id="L94"><span class="lineNum">      94</span> <span class="tlaGNC">        4620 :   va_end(args_cp);</span></span>
+<span id="L95"><span class="lineNum">      95</span>              : </span>
+<span id="L96"><span class="lineNum">      96</span>              :   // currently there is no error handling for failure, so this is hack.</span>
+<span id="L97"><span class="lineNum">      97</span> <span class="tlaGNC">        4620 :   BM_CHECK(ret &gt;= 0);</span></span>
+<span id="L98"><span class="lineNum">      98</span>              : </span>
+<span id="L99"><span class="lineNum">      99</span> <span class="tlaGNC">        4620 :   if (ret == 0) {  // handle empty expansion</span></span>
+<span id="L100"><span class="lineNum">     100</span> <span class="tlaUNC tlaBgUNC">           0 :     return {};</span></span>
+<span id="L101"><span class="lineNum">     101</span>              :   }</span>
+<span id="L102"><span class="lineNum">     102</span> <span class="tlaGNC tlaBgGNC">        4620 :   if (static_cast&lt;size_t&gt;(ret) &lt; size) {</span></span>
+<span id="L103"><span class="lineNum">     103</span> <span class="tlaGNC">        9240 :     return local_buff;</span></span>
+<span id="L104"><span class="lineNum">     104</span>              :   }</span>
+<span id="L105"><span class="lineNum">     105</span>              :   // we did not provide a long enough buffer on our first attempt.</span>
+<span id="L106"><span class="lineNum">     106</span> <span class="tlaUNC tlaBgUNC">           0 :   size = static_cast&lt;size_t&gt;(ret) + 1;  // + 1 for the null byte</span></span>
+<span id="L107"><span class="lineNum">     107</span> <span class="tlaUNC">           0 :   std::unique_ptr&lt;char[]&gt; buff(new char[size]);</span></span>
+<span id="L108"><span class="lineNum">     108</span> <span class="tlaUNC">           0 :   ret = vsnprintf(buff.get(), size, msg, args);</span></span>
+<span id="L109"><span class="lineNum">     109</span> <span class="tlaUNC">           0 :   BM_CHECK(ret &gt; 0 &amp;&amp; (static_cast&lt;size_t&gt;(ret)) &lt; size);</span></span>
+<span id="L110"><span class="lineNum">     110</span> <span class="tlaUNC">           0 :   return buff.get();</span></span>
+<span id="L111"><span class="lineNum">     111</span> <span class="tlaUNC">           0 : }</span></span>
+<span id="L112"><span class="lineNum">     112</span>              : </span>
+<span id="L113"><span class="lineNum">     113</span> <span class="tlaGNC tlaBgGNC">        1613 : std::string FormatString(const char* msg, ...) {</span></span>
+<span id="L114"><span class="lineNum">     114</span>              :   va_list args;</span>
+<span id="L115"><span class="lineNum">     115</span> <span class="tlaGNC">        1613 :   va_start(args, msg);</span></span>
+<span id="L116"><span class="lineNum">     116</span> <span class="tlaGNC">        1613 :   auto tmp = FormatString(msg, args);</span></span>
+<span id="L117"><span class="lineNum">     117</span> <span class="tlaGNC">        1613 :   va_end(args);</span></span>
+<span id="L118"><span class="lineNum">     118</span> <span class="tlaGNC">        3226 :   return tmp;</span></span>
+<span id="L119"><span class="lineNum">     119</span>              : }</span>
+<span id="L120"><span class="lineNum">     120</span>              : </span>
+<span id="L121"><span class="lineNum">     121</span> <span class="tlaGNC">         324 : void ColorPrintf(std::ostream&amp; out, LogColor color, const char* fmt, ...) {</span></span>
+<span id="L122"><span class="lineNum">     122</span>              :   va_list args;</span>
+<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC">         324 :   va_start(args, fmt);</span></span>
+<span id="L124"><span class="lineNum">     124</span> <span class="tlaGNC">         324 :   ColorPrintf(out, color, fmt, args);</span></span>
+<span id="L125"><span class="lineNum">     125</span> <span class="tlaGNC">         324 :   va_end(args);</span></span>
+<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">         324 : }</span></span>
+<span id="L127"><span class="lineNum">     127</span>              : </span>
+<span id="L128"><span class="lineNum">     128</span> <span class="tlaGNC">         324 : void ColorPrintf(std::ostream&amp; out, LogColor color, const char* fmt,</span></span>
+<span id="L129"><span class="lineNum">     129</span>              :                  va_list args) {</span>
+<span id="L130"><span class="lineNum">     130</span>              : #ifdef BENCHMARK_OS_WINDOWS</span>
+<span id="L131"><span class="lineNum">     131</span>              :   ((void)out);  // suppress unused warning</span>
+<span id="L132"><span class="lineNum">     132</span>              : </span>
+<span id="L133"><span class="lineNum">     133</span>              :   const HANDLE stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);</span>
+<span id="L134"><span class="lineNum">     134</span>              : </span>
+<span id="L135"><span class="lineNum">     135</span>              :   // Gets the current text color.</span>
+<span id="L136"><span class="lineNum">     136</span>              :   CONSOLE_SCREEN_BUFFER_INFO buffer_info;</span>
+<span id="L137"><span class="lineNum">     137</span>              :   GetConsoleScreenBufferInfo(stdout_handle, &amp;buffer_info);</span>
+<span id="L138"><span class="lineNum">     138</span>              :   const WORD old_color_attrs = buffer_info.wAttributes;</span>
+<span id="L139"><span class="lineNum">     139</span>              : </span>
+<span id="L140"><span class="lineNum">     140</span>              :   // We need to flush the stream buffers into the console before each</span>
+<span id="L141"><span class="lineNum">     141</span>              :   // SetConsoleTextAttribute call lest it affect the text that is already</span>
+<span id="L142"><span class="lineNum">     142</span>              :   // printed but has not yet reached the console.</span>
+<span id="L143"><span class="lineNum">     143</span>              :   fflush(stdout);</span>
+<span id="L144"><span class="lineNum">     144</span>              :   SetConsoleTextAttribute(stdout_handle,</span>
+<span id="L145"><span class="lineNum">     145</span>              :                           GetPlatformColorCode(color) | FOREGROUND_INTENSITY);</span>
+<span id="L146"><span class="lineNum">     146</span>              :   vprintf(fmt, args);</span>
+<span id="L147"><span class="lineNum">     147</span>              : </span>
+<span id="L148"><span class="lineNum">     148</span>              :   fflush(stdout);</span>
+<span id="L149"><span class="lineNum">     149</span>              :   // Restores the text color.</span>
+<span id="L150"><span class="lineNum">     150</span>              :   SetConsoleTextAttribute(stdout_handle, old_color_attrs);</span>
+<span id="L151"><span class="lineNum">     151</span>              : #else</span>
+<span id="L152"><span class="lineNum">     152</span> <span class="tlaGNC">         324 :   const char* color_code = GetPlatformColorCode(color);</span></span>
+<span id="L153"><span class="lineNum">     153</span> <span class="tlaGNC">         324 :   if (color_code) out &lt;&lt; FormatString(&quot;\033[0;3%sm&quot;, color_code);</span></span>
+<span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">         324 :   out &lt;&lt; FormatString(fmt, args) &lt;&lt; &quot;\033[m&quot;;</span></span>
+<span id="L155"><span class="lineNum">     155</span>              : #endif</span>
+<span id="L156"><span class="lineNum">     156</span> <span class="tlaGNC">         324 : }</span></span>
+<span id="L157"><span class="lineNum">     157</span>              : </span>
+<span id="L158"><span class="lineNum">     158</span> <span class="tlaGNC">          14 : bool IsColorTerminal() {</span></span>
+<span id="L159"><span class="lineNum">     159</span>              : #if BENCHMARK_OS_WINDOWS</span>
+<span id="L160"><span class="lineNum">     160</span>              :   // On Windows the TERM variable is usually not set, but the</span>
+<span id="L161"><span class="lineNum">     161</span>              :   // console there does support colors.</span>
+<span id="L162"><span class="lineNum">     162</span>              :   return 0 != _isatty(_fileno(stdout));</span>
+<span id="L163"><span class="lineNum">     163</span>              : #else</span>
+<span id="L164"><span class="lineNum">     164</span>              :   // On non-Windows platforms, we rely on the TERM variable. This list of</span>
+<span id="L165"><span class="lineNum">     165</span>              :   // supported TERM values is copied from Google Test:</span>
+<span id="L166"><span class="lineNum">     166</span>              :   // &lt;https://github.com/google/googletest/blob/v1.13.0/googletest/src/gtest.cc#L3225-L3259&gt;.</span>
+<span id="L167"><span class="lineNum">     167</span> <span class="tlaGNC">          14 :   const char* const SUPPORTED_TERM_VALUES[] = {</span></span>
+<span id="L168"><span class="lineNum">     168</span>              :       &quot;xterm&quot;,</span>
+<span id="L169"><span class="lineNum">     169</span>              :       &quot;xterm-color&quot;,</span>
+<span id="L170"><span class="lineNum">     170</span>              :       &quot;xterm-256color&quot;,</span>
+<span id="L171"><span class="lineNum">     171</span>              :       &quot;screen&quot;,</span>
+<span id="L172"><span class="lineNum">     172</span>              :       &quot;screen-256color&quot;,</span>
+<span id="L173"><span class="lineNum">     173</span>              :       &quot;tmux&quot;,</span>
+<span id="L174"><span class="lineNum">     174</span>              :       &quot;tmux-256color&quot;,</span>
+<span id="L175"><span class="lineNum">     175</span>              :       &quot;rxvt-unicode&quot;,</span>
+<span id="L176"><span class="lineNum">     176</span>              :       &quot;rxvt-unicode-256color&quot;,</span>
+<span id="L177"><span class="lineNum">     177</span>              :       &quot;linux&quot;,</span>
+<span id="L178"><span class="lineNum">     178</span>              :       &quot;cygwin&quot;,</span>
+<span id="L179"><span class="lineNum">     179</span>              :       &quot;xterm-kitty&quot;,</span>
+<span id="L180"><span class="lineNum">     180</span>              :       &quot;alacritty&quot;,</span>
+<span id="L181"><span class="lineNum">     181</span>              :       &quot;foot&quot;,</span>
+<span id="L182"><span class="lineNum">     182</span>              :       &quot;foot-extra&quot;,</span>
+<span id="L183"><span class="lineNum">     183</span>              :       &quot;wezterm&quot;,</span>
+<span id="L184"><span class="lineNum">     184</span>              :   };</span>
+<span id="L185"><span class="lineNum">     185</span>              : </span>
+<span id="L186"><span class="lineNum">     186</span> <span class="tlaGNC">          14 :   const char* const term = getenv(&quot;TERM&quot;);</span></span>
+<span id="L187"><span class="lineNum">     187</span>              : </span>
+<span id="L188"><span class="lineNum">     188</span> <span class="tlaGNC">          14 :   bool term_supports_color = false;</span></span>
+<span id="L189"><span class="lineNum">     189</span> <span class="tlaGNC">          42 :   for (const char* candidate : SUPPORTED_TERM_VALUES) {</span></span>
+<span id="L190"><span class="lineNum">     190</span> <span class="tlaGNC">          42 :     if (term &amp;&amp; 0 == strcmp(term, candidate)) {</span></span>
+<span id="L191"><span class="lineNum">     191</span> <span class="tlaGNC">          14 :       term_supports_color = true;</span></span>
+<span id="L192"><span class="lineNum">     192</span> <span class="tlaGNC">          14 :       break;</span></span>
+<span id="L193"><span class="lineNum">     193</span>              :     }</span>
+<span id="L194"><span class="lineNum">     194</span>              :   }</span>
+<span id="L195"><span class="lineNum">     195</span>              : </span>
+<span id="L196"><span class="lineNum">     196</span> <span class="tlaGNC">          14 :   return 0 != isatty(fileno(stdout)) &amp;&amp; term_supports_color;</span></span>
+<span id="L197"><span class="lineNum">     197</span>              : #endif  // BENCHMARK_OS_WINDOWS</span>
+<span id="L198"><span class="lineNum">     198</span>              : }</span>
+<span id="L199"><span class="lineNum">     199</span>              : </span>
+<span id="L200"><span class="lineNum">     200</span>              : }  // end namespace benchmark</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

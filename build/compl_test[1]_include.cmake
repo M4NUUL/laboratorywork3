@@ -1,0 +1,5 @@
+if(EXISTS "/home/user/3sem/labb/build/compl_test[1]_tests.cmake")
+  include("/home/user/3sem/labb/build/compl_test[1]_tests.cmake")
+else()
+  add_test(compl_test_NOT_BUILT compl_test_NOT_BUILT)
+endif()

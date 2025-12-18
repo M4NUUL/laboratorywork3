@@ -1,0 +1,203 @@
+MyArrTest.Branch_CapacityAndShrink 1 0.00348438
+MyArrTest.Branch_EdgeCases 1 0.00308395
+MyArrTest.IO_Errors_Coverage 1 0.00291485
+MyArrTest.SaveAndLoad_HappyPath 1 0.00293357
+TreeTest.EmptySearchPrintRemove 1 0.00300686
+TreeTest.InsertRootAndDuplicate 1 0.00282713
+TreeTest.InsertLeftRightSearch 1 0.00328284
+TreeTest.DeleteLeaf 1 0.00320861
+TreeTest.DeleteNodeOneChild_LeftOnly 1 0.00304045
+TreeTest.DeleteNodeOneChild_RightOnly 1 0.00334328
+TreeTest.DeleteNodeTwoChildren 1 0.00323399
+TreeTest.RemoveMissing 1 0.00291994
+TreeTest.ClearTree 1 0.00317926
+TreeTest.PrintNonEmpty 1 0.00314758
+TreeTest.SaveLoadTextFile 1 0.00311517
+TreeTest.SaveLoadBinaryFile 1 0.00330364
+TreeTest.Coverage_Remove_Root_TwoChildren 1 0.00323261
+TreeTest.Coverage_Remove_Root_OneChild 1 0.00324389
+TreeTest.Coverage_Remove_NotExists_And_Empty 1 0.00300791
+TreeTest.Coverage_Insert_Duplicates 1 0.00325708
+TreeTest.Coverage_IO_Errors 1 0.00340699
+TreeTest.LoadFromEmptyFiles 1 0.00349298
+DListTest.Coverage_Empty_Ops 1 0.003114
+DListTest.Coverage_SingleElement_Transitions 1 0.00306283
+DListTest.Coverage_AddBefore_AddAfter_Complex 1 0.0030208
+DListTest.Coverage_DelByVal_Branches 1 0.00290603
+DListTest.Coverage_DelAfter_DelBefore_Boundary 1 0.00325302
+DListTest.Coverage_IO 1 0.00315871
+HashTest.OpenHash_Insert_Update_DeletedSlot 1 0.0031607
+HashTest.OpenHash_FindErase_NotFound 1 0.00340384
+HashTest.OpenHash_FullTable 1 0.00330007
+HashTest.ChainHash_InsertUpdate 1 0.00283493
+HashTest.ChainHash_CollisionsAndErase 1 0.00341095
+HashTest.ChainHash_ShowEmpty 1 0.00311142
+HashTest.ChainHash_SaveLoad 1 0.00338741
+HashTest.OpenHash_SaveLoad 1 0.00365602
+HashTest.LoadFromBadFile 1 0.00324375
+HashTest.parse_cmd_CorrectSplits 1 0.00308653
+HashTest.parse_cmd_LeadingSpaces 1 0.00294856
+HashTest.ChainHash_Collision_DeleteMiddle 1 0.00293483
+HashTest.ChainHash_UpdateValue 1 0.00292966
+HashTest.ChainHash_EmptyOps 1 0.00306049
+HashTest.OpenHash_TableFull_WrapAround 1 0.00302032
+HashTest.OpenHash_Deleted_Reuse 1 0.00337738
+HashTest.OpenHash_Loop_NotFound 1 0.00304509
+HashTest.Hash_IO_Errors 1 0.00326238
+HashTest.Hash_Cmd_Parse 1 0.00343576
+HashTest.hash_man_scripted 1 0.0030774
+MyListTest.Branch_Deletions 1 0.00315929
+MyListTest.Branch_AdvancedOps 1 0.00348822
+MyListTest.AddBeforeHeadValue 1 0.00328015
+MyListTest.AddAfterNotFound 1 0.0030589
+MyListTest.DelByValueEmpty 1 0.00313707
+MyListTest.DelTailMultiple 1 0.00327305
+MyListTest.Coverage_EmptyPrints 1 0.0033697
+MyListTest.Coverage_DelHeadEmpty 1 0.00308024
+MyListTest.Coverage_Serialization_Fail 1 0.00343855
+MyListTest.Coverage_Load_Corrupted 1 0.00352162
+MyListTest.Coverage_Delete_From_Empty 1 0.00330433
+MyListTest.Coverage_Add_EdgeCases 1 0.00294011
+MyListTest.Coverage_Delete_Head_Tail_SingleElement 1 0.00334286
+MyListTest.Coverage_DelByValue_Cases 1 0.00313801
+MyListTest.Coverage_DelAfter_DelBefore 1 0.00301282
+MyListTest.Coverage_IO_Failures 1 0.00321542
+MyListTest.Coverage_Load_Overwrite 1 0.00337074
+ListTest.BranchBooster_ComplexConditions 1 0.00304298
+DestructorTest.MyListCleanup 1 0.0034294
+QueueTest.Branch_Coverage 1 0.00403535
+QueueTest.BranchBooster_PopEmpty 1 0.00416781
+QueueTest.SaveAndLoadFile 1 0.0039848
+QueueTest.LoadFromBadFile 1 0.00397786
+QueueTest.TruncatedFile 1 0.00366128
+QueueTest.Coverage_EmptyOps 1 0.00334566
+QueueTest.Coverage_FullCycle 1 0.00328519
+QueueTest.Coverage_IO 1 0.00321378
+DestructorTest.QueueCleanup 1 0.0031236
+StackTest.Branch_Coverage 1 0.00353352
+StackTest.Branch_Killer_And_Extras 1 0.00292385
+StackTest.SaveAndLoadFile 1 0.00318207
+StackTest.LoadFromBadFile 1 0.00326061
+StackTest.Coverage_EmptyOps 1 0.00298083
+StackTest.Coverage_IO 1 0.00315583
+DestructorTest.StackCleanup 1 0.00349202
+Проверка данных...- Индекс 0: Москва (Ожидалось: Москва) 1 0.00929823
+Проверка данных...- Индекс 1: Лондон (Ожидалось: Лондон) 1 0.00323699
+Проверка данных...- Индекс 3: Париж (Ожидалось: Париж) 1 0.00302563
+Проверка данных...- Индекс 0: Москва (Ожидалось: Москва) 1 0.00323775
+Проверка данных...- Индекс 1: Лондон (Ожидалось: Лондон) 1 0.00322822
+Проверка данных...- Индекс 3: Париж (Ожидалось: Париж) 1 0.0029601
+Проверка наличия значений...- Найдено: Берлин 1 0.00298414
+Проверка наличия значений...- Найдено: Мадрид 1 0.00308277
+Проверка наличия значений...- Найдено: Рим 1 0.00312729
+Проверка наличия значений...- Найдено: Берлин 1 0.00305297
+Проверка наличия значений...- Найдено: Мадрид 1 0.00310121
+Проверка наличия значений...- Найдено: Рим 1 0.00352159
+Проверка наличия значений...- Найдено: Пекин 1 0.00318854
+Проверка наличия значений...- Найдено: Сеул 1 0.00329166
+Проверка наличия значений...- Найдено: Бангкок 1 0.00303596
+Проверка наличия значений...- Найдено: Пекин 1 0.00289511
+Проверка наличия значений...- Найдено: Сеул 1 0.00319278
+Проверка наличия значений...- Найдено: Бангкок 1 0.00315601
+Проверка порядка (LIFO)...- Pop 1: Копенгаген (Ожидалось: Копенгаген) 1 0.00290653
+Проверка порядка (LIFO)...- Pop 2: Стокгольм (Ожидалось: Стокгольм) 1 0.00287078
+Проверка порядка (LIFO)...- Pop 3: Осло (Ожидалось: Осло) 1 0.00324423
+Проверка порядка (LIFO)...- Pop 1: Копенгаген (Ожидалось: Копенгаген) 1 0.00309236
+Проверка порядка (LIFO)...- Pop 2: Стокгольм (Ожидалось: Стокгольм) 1 0.00301514
+Проверка порядка (LIFO)...- Pop 3: Осло (Ожидалось: Осло) 1 0.00316186
+Проверка порядка (FIFO)...- Pop 1: Дели (Ожидалось: Дели) 1 0.00356857
+Проверка порядка (FIFO)...- Pop 2: Мумбаи (Ожидалось: Мумбаи) 1 0.00314156
+Проверка порядка (FIFO)...- Pop 3: Калькутта (Ожидалось: Калькутта) 1 0.00355085
+Проверка порядка (FIFO)...- Pop 1: Дели (Ожидалось: Дели) 1 0.00341779
+Проверка порядка (FIFO)...- Pop 2: Мумбаи (Ожидалось: Мумбаи) 1 0.00308752
+Проверка порядка (FIFO)...- Pop 3: Калькутта (Ожидалось: Калькутта) 1 0.00311523
+ Поиск узлов...- 50 найдено 1 0.00318325
+ Поиск узлов...- 30 найдено 1 0.00322603
+ Поиск узлов...- 70 найдено 1 0.00354157
+Поиск узлов...- 50 найдено 1 0.00316901
+Поиск узлов...- 30 найдено 1 0.0028846
+Поиск узлов...- 70 найдено 1 0.00282242
+ Проверка значений...- key1 -> value1 1 0.00312683
+ Проверка значений...- key2 -> value2 1 0.00329495
+ Проверка значений...- key1 -> value1 1 0.002969
+ Проверка значений...- key2 -> value2 1 0.00301234
+Проверка значений...- k1 -> v1 1 0.00336663
+Проверка значений...- k2 -> v2 1 0.00311634
+Проверка значений...- k1 -> v1 1 0.00336378
+Проверка значений...- k2 -> v2 1 0.00329697
+benchmark 1 4.37339
+spec_arg 1 0.806949
+spec_arg_verbosity 1 0.00416571
+benchmark_setup_teardown 1 0.859843
+min_time_flag_time 1 2.02502
+min_time_flag_iters 1 0.00495203
+filter_simple 1 0.0580843
+filter_simple_list_only 1 0.00412296
+filter_simple_negative 1 0.0450942
+filter_simple_negative_list_only 1 0.00422573
+filter_suffix 1 0.0736906
+filter_suffix_list_only 1 0.0044013
+filter_suffix_negative 1 0.020097
+filter_suffix_negative_list_only 1 0.00389314
+filter_regex_all 1 0.098265
+filter_regex_all_list_only 1 0.00475391
+filter_regex_all_negative 1 0.00415482
+filter_regex_all_negative_list_only 1 0.00405701
+filter_regex_blank 1 0.0988242
+filter_regex_blank_list_only 1 0.00402638
+filter_regex_blank_negative 1 0.00390264
+filter_regex_blank_negative_list_only 1 0.003931
+filter_regex_none 1 0.00399693
+filter_regex_none_list_only 1 0.00362428
+filter_regex_none_negative 1 0.0898242
+filter_regex_none_negative_list_only 1 0.00421355
+filter_regex_wildcard 1 0.0601379
+filter_regex_wildcard_list_only 1 0.00405247
+filter_regex_wildcard_negative 1 0.044055
+filter_regex_wildcard_negative_list_only 1 0.00397557
+filter_regex_begin 1 0.0740078
+filter_regex_begin_list_only 1 0.00420784
+filter_regex_begin_negative 1 0.019449
+filter_regex_begin_negative_list_only 1 0.00403912
+filter_regex_begin2 1 0.0192191
+filter_regex_begin2_list_only 1 0.00403672
+filter_regex_begin2_negative 1 0.0838588
+filter_regex_begin2_negative_list_only 1 0.00423949
+filter_regex_end 1 0.020909
+filter_regex_end_list_only 1 0.00412442
+filter_regex_end_negative 1 0.0846847
+filter_regex_end_negative_list_only 1 0.00412274
+options_benchmarks 1 5.41812
+basic_benchmark 1 0.66719
+repetitions_benchmark 1 0.126454
+diagnostics_test 1 0.0401005
+skip_with_error_test 1 0.155853
+donotoptimize_test 1 0.00400595
+fixture_test 1 0.0484217
+register_benchmark_test 1 0.195633
+map_test 1 0.339731
+multiple_ranges_test 1 0.47622
+args_product_test 1 0.259815
+link_main_test 1 0.0222484
+reporter_output_test 1 0.851036
+templated_fixture_test 1 0.037761
+user_counters_test 1 0.411799
+perf_counters_test 1 0.00524247
+internal_threading_test 1 1.81476
+report_aggregates_only_test 1 0.0489485
+display_aggregates_only_test 1 0.0503627
+user_counters_tabular_test 1 0.487428
+user_counters_thousands_test 1 0.0647211
+memory_manager_test 1 0.0266782
+cxx03 1 0.162018
+complexity_benchmark 1 1.49409
+benchmark_gtest 1 0.00669766
+benchmark_name_gtest 1 0.00605196
+benchmark_random_interleaving_gtest 1 0.00766806
+commandlineflags_gtest 1 0.00599845
+statistics_gtest 1 0.00570978
+string_util_gtest 1 0.00659365
+perf_counters_gtest 1 0.00616257
+time_unit_gtest 1 0.00551103
+min_time_parse_gtest 1 0.00555456
+---

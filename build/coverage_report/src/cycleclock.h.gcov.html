@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_cleaned.info - src/cycleclock.h</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - cycleclock.h<span style="font-size: 80%;"> (source / <a href="cycleclock.h.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_cleaned.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">0.0&nbsp;%</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2025-11-21 19:45:54</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">-</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : // ----------------------------------------------------------------------</span>
+<span id="L2"><span class="lineNum">       2</span>              : // CycleClock</span>
+<span id="L3"><span class="lineNum">       3</span>              : //    A CycleClock tells you the current time in Cycles.  The &quot;time&quot;</span>
+<span id="L4"><span class="lineNum">       4</span>              : //    is actually time since power-on.  This is like time() but doesn't</span>
+<span id="L5"><span class="lineNum">       5</span>              : //    involve a system call and is much more precise.</span>
+<span id="L6"><span class="lineNum">       6</span>              : //</span>
+<span id="L7"><span class="lineNum">       7</span>              : // NOTE: Not all cpu/platform/kernel combinations guarantee that this</span>
+<span id="L8"><span class="lineNum">       8</span>              : // clock increments at a constant rate or is synchronized across all logical</span>
+<span id="L9"><span class="lineNum">       9</span>              : // cpus in a system.</span>
+<span id="L10"><span class="lineNum">      10</span>              : //</span>
+<span id="L11"><span class="lineNum">      11</span>              : // If you need the above guarantees, please consider using a different</span>
+<span id="L12"><span class="lineNum">      12</span>              : // API. There are efforts to provide an interface which provides a millisecond</span>
+<span id="L13"><span class="lineNum">      13</span>              : // granularity and implemented as a memory read. A memory read is generally</span>
+<span id="L14"><span class="lineNum">      14</span>              : // cheaper than the CycleClock for many architectures.</span>
+<span id="L15"><span class="lineNum">      15</span>              : //</span>
+<span id="L16"><span class="lineNum">      16</span>              : // Also, in some out of order CPU implementations, the CycleClock is not</span>
+<span id="L17"><span class="lineNum">      17</span>              : // serializing. So if you're trying to count at cycles granularity, your</span>
+<span id="L18"><span class="lineNum">      18</span>              : // data might be inaccurate due to out of order instruction execution.</span>
+<span id="L19"><span class="lineNum">      19</span>              : // ----------------------------------------------------------------------</span>
+<span id="L20"><span class="lineNum">      20</span>              : </span>
+<span id="L21"><span class="lineNum">      21</span>              : #ifndef BENCHMARK_CYCLECLOCK_H_</span>
+<span id="L22"><span class="lineNum">      22</span>              : #define BENCHMARK_CYCLECLOCK_H_</span>
+<span id="L23"><span class="lineNum">      23</span>              : </span>
+<span id="L24"><span class="lineNum">      24</span>              : #include &lt;cstdint&gt;</span>
+<span id="L25"><span class="lineNum">      25</span>              : </span>
+<span id="L26"><span class="lineNum">      26</span>              : #include &quot;benchmark/benchmark.h&quot;</span>
+<span id="L27"><span class="lineNum">      27</span>              : #include &quot;internal_macros.h&quot;</span>
+<span id="L28"><span class="lineNum">      28</span>              : </span>
+<span id="L29"><span class="lineNum">      29</span>              : #if defined(BENCHMARK_OS_MACOSX)</span>
+<span id="L30"><span class="lineNum">      30</span>              : #include &lt;mach/mach_time.h&gt;</span>
+<span id="L31"><span class="lineNum">      31</span>              : #endif</span>
+<span id="L32"><span class="lineNum">      32</span>              : // For MSVC, we want to use '_asm rdtsc' when possible (since it works</span>
+<span id="L33"><span class="lineNum">      33</span>              : // with even ancient MSVC compilers), and when not possible the</span>
+<span id="L34"><span class="lineNum">      34</span>              : // __rdtsc intrinsic, declared in &lt;intrin.h&gt;.  Unfortunately, in some</span>
+<span id="L35"><span class="lineNum">      35</span>              : // environments, &lt;windows.h&gt; and &lt;intrin.h&gt; have conflicting</span>
+<span id="L36"><span class="lineNum">      36</span>              : // declarations of some other intrinsics, breaking compilation.</span>
+<span id="L37"><span class="lineNum">      37</span>              : // Therefore, we simply declare __rdtsc ourselves. See also</span>
+<span id="L38"><span class="lineNum">      38</span>              : // http://connect.microsoft.com/VisualStudio/feedback/details/262047</span>
+<span id="L39"><span class="lineNum">      39</span>              : #if defined(COMPILER_MSVC) &amp;&amp; !defined(_M_IX86) &amp;&amp; !defined(_M_ARM64) &amp;&amp; \</span>
+<span id="L40"><span class="lineNum">      40</span>              :     !defined(_M_ARM64EC)</span>
+<span id="L41"><span class="lineNum">      41</span>              : extern &quot;C&quot; uint64_t __rdtsc();</span>
+<span id="L42"><span class="lineNum">      42</span>              : #pragma intrinsic(__rdtsc)</span>
+<span id="L43"><span class="lineNum">      43</span>              : #endif</span>
+<span id="L44"><span class="lineNum">      44</span>              : </span>
+<span id="L45"><span class="lineNum">      45</span>              : #if !defined(BENCHMARK_OS_WINDOWS) || defined(BENCHMARK_OS_MINGW)</span>
+<span id="L46"><span class="lineNum">      46</span>              : #include &lt;sys/time.h&gt;</span>
+<span id="L47"><span class="lineNum">      47</span>              : #include &lt;time.h&gt;</span>
+<span id="L48"><span class="lineNum">      48</span>              : #endif</span>
+<span id="L49"><span class="lineNum">      49</span>              : </span>
+<span id="L50"><span class="lineNum">      50</span>              : #ifdef BENCHMARK_OS_EMSCRIPTEN</span>
+<span id="L51"><span class="lineNum">      51</span>              : #include &lt;emscripten.h&gt;</span>
+<span id="L52"><span class="lineNum">      52</span>              : #endif</span>
+<span id="L53"><span class="lineNum">      53</span>              : </span>
+<span id="L54"><span class="lineNum">      54</span>              : namespace benchmark {</span>
+<span id="L55"><span class="lineNum">      55</span>              : // NOTE: only i386 and x86_64 have been well tested.</span>
+<span id="L56"><span class="lineNum">      56</span>              : // PPC, sparc, alpha, and ia64 are based on</span>
+<span id="L57"><span class="lineNum">      57</span>              : //    http://peter.kuscsik.com/wordpress/?p=14</span>
+<span id="L58"><span class="lineNum">      58</span>              : // with modifications by m3b.  See also</span>
+<span id="L59"><span class="lineNum">      59</span>              : //    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h</span>
+<span id="L60"><span class="lineNum">      60</span>              : namespace cycleclock {</span>
+<span id="L61"><span class="lineNum">      61</span>              : // This should return the number of cycles since power-on.  Thread-safe.</span>
+<span id="L62"><span class="lineNum">      62</span>              : inline BENCHMARK_ALWAYS_INLINE int64_t Now() {</span>
+<span id="L63"><span class="lineNum">      63</span>              : #if defined(BENCHMARK_OS_MACOSX)</span>
+<span id="L64"><span class="lineNum">      64</span>              :   // this goes at the top because we need ALL Macs, regardless of</span>
+<span id="L65"><span class="lineNum">      65</span>              :   // architecture, to return the number of &quot;mach time units&quot; that</span>
+<span id="L66"><span class="lineNum">      66</span>              :   // have passed since startup.  See sysinfo.cc where</span>
+<span id="L67"><span class="lineNum">      67</span>              :   // InitializeSystemInfo() sets the supposed cpu clock frequency of</span>
+<span id="L68"><span class="lineNum">      68</span>              :   // macs to the number of mach time units per second, not actual</span>
+<span id="L69"><span class="lineNum">      69</span>              :   // CPU clock frequency (which can change in the face of CPU</span>
+<span id="L70"><span class="lineNum">      70</span>              :   // frequency scaling).  Also note that when the Mac sleeps, this</span>
+<span id="L71"><span class="lineNum">      71</span>              :   // counter pauses; it does not continue counting, nor does it</span>
+<span id="L72"><span class="lineNum">      72</span>              :   // reset to zero.</span>
+<span id="L73"><span class="lineNum">      73</span>              :   return mach_absolute_time();</span>
+<span id="L74"><span class="lineNum">      74</span>              : #elif defined(BENCHMARK_OS_EMSCRIPTEN)</span>
+<span id="L75"><span class="lineNum">      75</span>              :   // this goes above x86-specific code because old versions of Emscripten</span>
+<span id="L76"><span class="lineNum">      76</span>              :   // define __x86_64__, although they have nothing to do with it.</span>
+<span id="L77"><span class="lineNum">      77</span>              :   return static_cast&lt;int64_t&gt;(emscripten_get_now() * 1e+6);</span>
+<span id="L78"><span class="lineNum">      78</span>              : #elif defined(__i386__)</span>
+<span id="L79"><span class="lineNum">      79</span>              :   int64_t ret;</span>
+<span id="L80"><span class="lineNum">      80</span>              :   __asm__ volatile(&quot;rdtsc&quot; : &quot;=A&quot;(ret));</span>
+<span id="L81"><span class="lineNum">      81</span>              :   return ret;</span>
+<span id="L82"><span class="lineNum">      82</span>              : #elif defined(__x86_64__) || defined(__amd64__)</span>
+<span id="L83"><span class="lineNum">      83</span>              :   uint64_t low, high;</span>
+<span id="L84"><span class="lineNum">      84</span> <span class="tlaUNC tlaBgUNC">           0 :   __asm__ volatile(&quot;rdtsc&quot; : &quot;=a&quot;(low), &quot;=d&quot;(high));</span></span>
+<span id="L85"><span class="lineNum">      85</span> <span class="tlaUNC">           0 :   return (high &lt;&lt; 32) | low;</span></span>
+<span id="L86"><span class="lineNum">      86</span>              : #elif defined(__powerpc__) || defined(__ppc__)</span>
+<span id="L87"><span class="lineNum">      87</span>              :   // This returns a time-base, which is not always precisely a cycle-count.</span>
+<span id="L88"><span class="lineNum">      88</span>              : #if defined(__powerpc64__) || defined(__ppc64__)</span>
+<span id="L89"><span class="lineNum">      89</span>              :   int64_t tb;</span>
+<span id="L90"><span class="lineNum">      90</span>              :   asm volatile(&quot;mfspr %0, 268&quot; : &quot;=r&quot;(tb));</span>
+<span id="L91"><span class="lineNum">      91</span>              :   return tb;</span>
+<span id="L92"><span class="lineNum">      92</span>              : #else</span>
+<span id="L93"><span class="lineNum">      93</span>              :   uint32_t tbl, tbu0, tbu1;</span>
+<span id="L94"><span class="lineNum">      94</span>              :   asm volatile(</span>
+<span id="L95"><span class="lineNum">      95</span>              :       &quot;mftbu %0\n&quot;</span>
+<span id="L96"><span class="lineNum">      96</span>              :       &quot;mftb %1\n&quot;</span>
+<span id="L97"><span class="lineNum">      97</span>              :       &quot;mftbu %2&quot;</span>
+<span id="L98"><span class="lineNum">      98</span>              :       : &quot;=r&quot;(tbu0), &quot;=r&quot;(tbl), &quot;=r&quot;(tbu1));</span>
+<span id="L99"><span class="lineNum">      99</span>              :   tbl &amp;= -static_cast&lt;int32_t&gt;(tbu0 == tbu1);</span>
+<span id="L100"><span class="lineNum">     100</span>              :   // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is no longer needed)</span>
+<span id="L101"><span class="lineNum">     101</span>              :   return (static_cast&lt;uint64_t&gt;(tbu1) &lt;&lt; 32) | tbl;</span>
+<span id="L102"><span class="lineNum">     102</span>              : #endif</span>
+<span id="L103"><span class="lineNum">     103</span>              : #elif defined(__sparc__)</span>
+<span id="L104"><span class="lineNum">     104</span>              :   int64_t tick;</span>
+<span id="L105"><span class="lineNum">     105</span>              :   asm(&quot;.byte 0x83, 0x41, 0x00, 0x00&quot;);</span>
+<span id="L106"><span class="lineNum">     106</span>              :   asm(&quot;mov   %%g1, %0&quot; : &quot;=r&quot;(tick));</span>
+<span id="L107"><span class="lineNum">     107</span>              :   return tick;</span>
+<span id="L108"><span class="lineNum">     108</span>              : #elif defined(__ia64__)</span>
+<span id="L109"><span class="lineNum">     109</span>              :   int64_t itc;</span>
+<span id="L110"><span class="lineNum">     110</span>              :   asm(&quot;mov %0 = ar.itc&quot; : &quot;=r&quot;(itc));</span>
+<span id="L111"><span class="lineNum">     111</span>              :   return itc;</span>
+<span id="L112"><span class="lineNum">     112</span>              : #elif defined(COMPILER_MSVC) &amp;&amp; defined(_M_IX86)</span>
+<span id="L113"><span class="lineNum">     113</span>              :   // Older MSVC compilers (like 7.x) don't seem to support the</span>
+<span id="L114"><span class="lineNum">     114</span>              :   // __rdtsc intrinsic properly, so I prefer to use _asm instead</span>
+<span id="L115"><span class="lineNum">     115</span>              :   // when I know it will work.  Otherwise, I'll use __rdtsc and hope</span>
+<span id="L116"><span class="lineNum">     116</span>              :   // the code is being compiled with a non-ancient compiler.</span>
+<span id="L117"><span class="lineNum">     117</span>              :   _asm rdtsc</span>
+<span id="L118"><span class="lineNum">     118</span>              : #elif defined(COMPILER_MSVC) &amp;&amp; (defined(_M_ARM64) || defined(_M_ARM64EC))</span>
+<span id="L119"><span class="lineNum">     119</span>              :   // See // https://docs.microsoft.com/en-us/cpp/intrinsics/arm64-intrinsics</span>
+<span id="L120"><span class="lineNum">     120</span>              :   // and https://reviews.llvm.org/D53115</span>
+<span id="L121"><span class="lineNum">     121</span>              :   int64_t virtual_timer_value;</span>
+<span id="L122"><span class="lineNum">     122</span>              :   virtual_timer_value = _ReadStatusReg(ARM64_CNTVCT);</span>
+<span id="L123"><span class="lineNum">     123</span>              :   return virtual_timer_value;</span>
+<span id="L124"><span class="lineNum">     124</span>              : #elif defined(COMPILER_MSVC)</span>
+<span id="L125"><span class="lineNum">     125</span>              :   return __rdtsc();</span>
+<span id="L126"><span class="lineNum">     126</span>              : #elif defined(BENCHMARK_OS_NACL)</span>
+<span id="L127"><span class="lineNum">     127</span>              :   // Native Client validator on x86/x86-64 allows RDTSC instructions,</span>
+<span id="L128"><span class="lineNum">     128</span>              :   // and this case is handled above. Native Client validator on ARM</span>
+<span id="L129"><span class="lineNum">     129</span>              :   // rejects MRC instructions (used in the ARM-specific sequence below),</span>
+<span id="L130"><span class="lineNum">     130</span>              :   // so we handle it here. Portable Native Client compiles to</span>
+<span id="L131"><span class="lineNum">     131</span>              :   // architecture-agnostic bytecode, which doesn't provide any</span>
+<span id="L132"><span class="lineNum">     132</span>              :   // cycle counter access mnemonics.</span>
+<span id="L133"><span class="lineNum">     133</span>              : </span>
+<span id="L134"><span class="lineNum">     134</span>              :   // Native Client does not provide any API to access cycle counter.</span>
+<span id="L135"><span class="lineNum">     135</span>              :   // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday</span>
+<span id="L136"><span class="lineNum">     136</span>              :   // because is provides nanosecond resolution (which is noticeable at</span>
+<span id="L137"><span class="lineNum">     137</span>              :   // least for PNaCl modules running on x86 Mac &amp; Linux).</span>
+<span id="L138"><span class="lineNum">     138</span>              :   // Initialize to always return 0 if clock_gettime fails.</span>
+<span id="L139"><span class="lineNum">     139</span>              :   struct timespec ts = {0, 0};</span>
+<span id="L140"><span class="lineNum">     140</span>              :   clock_gettime(CLOCK_MONOTONIC, &amp;ts);</span>
+<span id="L141"><span class="lineNum">     141</span>              :   return static_cast&lt;int64_t&gt;(ts.tv_sec) * 1000000000 + ts.tv_nsec;</span>
+<span id="L142"><span class="lineNum">     142</span>              : #elif defined(__aarch64__)</span>
+<span id="L143"><span class="lineNum">     143</span>              :   // System timer of ARMv8 runs at a different frequency than the CPU's.</span>
+<span id="L144"><span class="lineNum">     144</span>              :   // The frequency is fixed, typically in the range 1-50MHz.  It can be</span>
+<span id="L145"><span class="lineNum">     145</span>              :   // read at CNTFRQ special register.  We assume the OS has set up</span>
+<span id="L146"><span class="lineNum">     146</span>              :   // the virtual timer properly.</span>
+<span id="L147"><span class="lineNum">     147</span>              :   int64_t virtual_timer_value;</span>
+<span id="L148"><span class="lineNum">     148</span>              :   asm volatile(&quot;mrs %0, cntvct_el0&quot; : &quot;=r&quot;(virtual_timer_value));</span>
+<span id="L149"><span class="lineNum">     149</span>              :   return virtual_timer_value;</span>
+<span id="L150"><span class="lineNum">     150</span>              : #elif defined(__ARM_ARCH)</span>
+<span id="L151"><span class="lineNum">     151</span>              :   // V6 is the earliest arch that has a standard cyclecount</span>
+<span id="L152"><span class="lineNum">     152</span>              :   // Native Client validator doesn't allow MRC instructions.</span>
+<span id="L153"><span class="lineNum">     153</span>              : #if (__ARM_ARCH &gt;= 6)</span>
+<span id="L154"><span class="lineNum">     154</span>              :   uint32_t pmccntr;</span>
+<span id="L155"><span class="lineNum">     155</span>              :   uint32_t pmuseren;</span>
+<span id="L156"><span class="lineNum">     156</span>              :   uint32_t pmcntenset;</span>
+<span id="L157"><span class="lineNum">     157</span>              :   // Read the user mode perf monitor counter access permissions.</span>
+<span id="L158"><span class="lineNum">     158</span>              :   asm volatile(&quot;mrc p15, 0, %0, c9, c14, 0&quot; : &quot;=r&quot;(pmuseren));</span>
+<span id="L159"><span class="lineNum">     159</span>              :   if (pmuseren &amp; 1) {  // Allows reading perfmon counters for user mode code.</span>
+<span id="L160"><span class="lineNum">     160</span>              :     asm volatile(&quot;mrc p15, 0, %0, c9, c12, 1&quot; : &quot;=r&quot;(pmcntenset));</span>
+<span id="L161"><span class="lineNum">     161</span>              :     if (pmcntenset &amp; 0x80000000ul) {  // Is it counting?</span>
+<span id="L162"><span class="lineNum">     162</span>              :       asm volatile(&quot;mrc p15, 0, %0, c9, c13, 0&quot; : &quot;=r&quot;(pmccntr));</span>
+<span id="L163"><span class="lineNum">     163</span>              :       // The counter is set up to count every 64th cycle</span>
+<span id="L164"><span class="lineNum">     164</span>              :       return static_cast&lt;int64_t&gt;(pmccntr) * 64;  // Should optimize to &lt;&lt; 6</span>
+<span id="L165"><span class="lineNum">     165</span>              :     }</span>
+<span id="L166"><span class="lineNum">     166</span>              :   }</span>
+<span id="L167"><span class="lineNum">     167</span>              : #endif</span>
+<span id="L168"><span class="lineNum">     168</span>              :   struct timeval tv;</span>
+<span id="L169"><span class="lineNum">     169</span>              :   gettimeofday(&amp;tv, nullptr);</span>
+<span id="L170"><span class="lineNum">     170</span>              :   return static_cast&lt;int64_t&gt;(tv.tv_sec) * 1000000 + tv.tv_usec;</span>
+<span id="L171"><span class="lineNum">     171</span>              : #elif defined(__mips__) || defined(__m68k__)</span>
+<span id="L172"><span class="lineNum">     172</span>              :   // mips apparently only allows rdtsc for superusers, so we fall</span>
+<span id="L173"><span class="lineNum">     173</span>              :   // back to gettimeofday.  It's possible clock_gettime would be better.</span>
+<span id="L174"><span class="lineNum">     174</span>              :   struct timeval tv;</span>
+<span id="L175"><span class="lineNum">     175</span>              :   gettimeofday(&amp;tv, nullptr);</span>
+<span id="L176"><span class="lineNum">     176</span>              :   return static_cast&lt;int64_t&gt;(tv.tv_sec) * 1000000 + tv.tv_usec;</span>
+<span id="L177"><span class="lineNum">     177</span>              : #elif defined(__loongarch__) || defined(__csky__)</span>
+<span id="L178"><span class="lineNum">     178</span>              :   struct timeval tv;</span>
+<span id="L179"><span class="lineNum">     179</span>              :   gettimeofday(&amp;tv, nullptr);</span>
+<span id="L180"><span class="lineNum">     180</span>              :   return static_cast&lt;int64_t&gt;(tv.tv_sec) * 1000000 + tv.tv_usec;</span>
+<span id="L181"><span class="lineNum">     181</span>              : #elif defined(__s390__)  // Covers both s390 and s390x.</span>
+<span id="L182"><span class="lineNum">     182</span>              :   // Return the CPU clock.</span>
+<span id="L183"><span class="lineNum">     183</span>              :   uint64_t tsc;</span>
+<span id="L184"><span class="lineNum">     184</span>              : #if defined(BENCHMARK_OS_ZOS) &amp;&amp; defined(COMPILER_IBMXL)</span>
+<span id="L185"><span class="lineNum">     185</span>              :   // z/OS XL compiler HLASM syntax.</span>
+<span id="L186"><span class="lineNum">     186</span>              :   asm(&quot; stck %0&quot; : &quot;=m&quot;(tsc) : : &quot;cc&quot;);</span>
+<span id="L187"><span class="lineNum">     187</span>              : #else</span>
+<span id="L188"><span class="lineNum">     188</span>              :   asm(&quot;stck %0&quot; : &quot;=Q&quot;(tsc) : : &quot;cc&quot;);</span>
+<span id="L189"><span class="lineNum">     189</span>              : #endif</span>
+<span id="L190"><span class="lineNum">     190</span>              :   return tsc;</span>
+<span id="L191"><span class="lineNum">     191</span>              : #elif defined(__riscv)  // RISC-V</span>
+<span id="L192"><span class="lineNum">     192</span>              :   // Use RDCYCLE (and RDCYCLEH on riscv32)</span>
+<span id="L193"><span class="lineNum">     193</span>              : #if __riscv_xlen == 32</span>
+<span id="L194"><span class="lineNum">     194</span>              :   uint32_t cycles_lo, cycles_hi0, cycles_hi1;</span>
+<span id="L195"><span class="lineNum">     195</span>              :   // This asm also includes the PowerPC overflow handling strategy, as above.</span>
+<span id="L196"><span class="lineNum">     196</span>              :   // Implemented in assembly because Clang insisted on branching.</span>
+<span id="L197"><span class="lineNum">     197</span>              :   asm volatile(</span>
+<span id="L198"><span class="lineNum">     198</span>              :       &quot;rdcycleh %0\n&quot;</span>
+<span id="L199"><span class="lineNum">     199</span>              :       &quot;rdcycle %1\n&quot;</span>
+<span id="L200"><span class="lineNum">     200</span>              :       &quot;rdcycleh %2\n&quot;</span>
+<span id="L201"><span class="lineNum">     201</span>              :       &quot;sub %0, %0, %2\n&quot;</span>
+<span id="L202"><span class="lineNum">     202</span>              :       &quot;seqz %0, %0\n&quot;</span>
+<span id="L203"><span class="lineNum">     203</span>              :       &quot;sub %0, zero, %0\n&quot;</span>
+<span id="L204"><span class="lineNum">     204</span>              :       &quot;and %1, %1, %0\n&quot;</span>
+<span id="L205"><span class="lineNum">     205</span>              :       : &quot;=r&quot;(cycles_hi0), &quot;=r&quot;(cycles_lo), &quot;=r&quot;(cycles_hi1));</span>
+<span id="L206"><span class="lineNum">     206</span>              :   return (static_cast&lt;uint64_t&gt;(cycles_hi1) &lt;&lt; 32) | cycles_lo;</span>
+<span id="L207"><span class="lineNum">     207</span>              : #else</span>
+<span id="L208"><span class="lineNum">     208</span>              :   uint64_t cycles;</span>
+<span id="L209"><span class="lineNum">     209</span>              :   asm volatile(&quot;rdcycle %0&quot; : &quot;=r&quot;(cycles));</span>
+<span id="L210"><span class="lineNum">     210</span>              :   return cycles;</span>
+<span id="L211"><span class="lineNum">     211</span>              : #endif</span>
+<span id="L212"><span class="lineNum">     212</span>              : #elif defined(__e2k__) || defined(__elbrus__)</span>
+<span id="L213"><span class="lineNum">     213</span>              :   struct timeval tv;</span>
+<span id="L214"><span class="lineNum">     214</span>              :   gettimeofday(&amp;tv, nullptr);</span>
+<span id="L215"><span class="lineNum">     215</span>              :   return static_cast&lt;int64_t&gt;(tv.tv_sec) * 1000000 + tv.tv_usec;</span>
+<span id="L216"><span class="lineNum">     216</span>              : #elif defined(__hexagon__)</span>
+<span id="L217"><span class="lineNum">     217</span>              :   uint64_t pcycle;</span>
+<span id="L218"><span class="lineNum">     218</span>              :   asm volatile(&quot;%0 = C15:14&quot; : &quot;=r&quot;(pcycle));</span>
+<span id="L219"><span class="lineNum">     219</span>              :   return static_cast&lt;double&gt;(pcycle);</span>
+<span id="L220"><span class="lineNum">     220</span>              : #else</span>
+<span id="L221"><span class="lineNum">     221</span>              : // The soft failover to a generic implementation is automatic only for ARM.</span>
+<span id="L222"><span class="lineNum">     222</span>              : // For other platforms the developer is expected to make an attempt to create</span>
+<span id="L223"><span class="lineNum">     223</span>              : // a fast implementation and use generic version if nothing better is available.</span>
+<span id="L224"><span class="lineNum">     224</span>              : #error You need to define CycleTimer for your OS and CPU</span>
+<span id="L225"><span class="lineNum">     225</span>              : #endif</span>
+<span id="L226"><span class="lineNum">     226</span>              : }</span>
+<span id="L227"><span class="lineNum">     227</span>              : }  // end namespace cycleclock</span>
+<span id="L228"><span class="lineNum">     228</span>              : }  // end namespace benchmark</span>
+<span id="L229"><span class="lineNum">     229</span>              : </span>
+<span id="L230"><span class="lineNum">     230</span>              : #endif  // BENCHMARK_CYCLECLOCK_H_</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+/usr/bin/c++  --coverage  --coverage CMakeFiles/dlist_test.dir/tests/dlist_test.cpp.o -o dlist_test  libDataStructures.a lib/libgtest.a lib/libgtest_main.a lib/libgtest.a 

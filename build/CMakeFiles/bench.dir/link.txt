@@ -1,0 +1,1 @@
+/usr/bin/c++  --coverage  --coverage CMakeFiles/bench.dir/bench.cpp.o -o bench  libDataStructures.a _deps/googlebenchmark-build/src/libbenchmark.a -lrt 

@@ -1,0 +1,1 @@
+/usr/bin/c++  --coverage  --coverage CMakeFiles/compl_test.dir/tests/compl_test.cpp.o -o compl_test  libDataStructures.a lib/libgtest.a lib/libgtest_main.a lib/libgtest.a 

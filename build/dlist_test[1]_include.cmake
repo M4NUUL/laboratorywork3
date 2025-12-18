@@ -1,0 +1,5 @@
+if(EXISTS "/home/user/3sem/labb/build/dlist_test[1]_tests.cmake")
+  include("/home/user/3sem/labb/build/dlist_test[1]_tests.cmake")
+else()
+  add_test(dlist_test_NOT_BUILT dlist_test_NOT_BUILT)
+endif()

@@ -1,0 +1,22 @@
+Checks: >
+  -*,
+  bugprone-*,
+  performance-*,
+  readability-*,
+  modernize-*,
+  clang-analyzer-*
+HeaderFilterRegex: '^(?!.*(_deps|/usr/|third_party|external)).*$'
+WarningsAsErrors: ''          # важно: пустая строка, не []
+FormatStyle: none
+
+#clang - отслеживание каких-нибудь веще которые приняты в разработке но они не приня
+
+#чтобы не ругался на слишком короткие имена только в тестах/бенчах
+readability-identifier-length:
+  MinimumVariableNameLength: 3
+  AllowedShortVariableNames: ['i','j','k','it','st']
+
+#в бенчах макросы/глобалки неизбежны — отключаем эти проверки
+cppcoreguidelines-macro-usage: false
+cppcoreguidelines-avoid-non-const-global-variables: false
+cppcoreguidelines-owning-memory: false

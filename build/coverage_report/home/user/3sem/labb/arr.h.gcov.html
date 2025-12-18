@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage_cleaned.info - home/user/3sem/labb/arr.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../../../index.html">top level</a> - <a href="index.html">/home/user/3sem/labb</a> - arr.h<span style="font-size: 80%;"> (source / <a href="arr.h.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage_cleaned.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2025-11-21 19:45:54</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+          </tr>
+                  <tr><td><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : #ifndef ARR_H</span>
+<span id="L2"><span class="lineNum">       2</span>              : #define ARR_H</span>
+<span id="L3"><span class="lineNum">       3</span>              : </span>
+<span id="L4"><span class="lineNum">       4</span>              : #include &lt;string&gt;</span>
+<span id="L5"><span class="lineNum">       5</span>              : #include &lt;iostream&gt;</span>
+<span id="L6"><span class="lineNum">       6</span>              : #include &lt;fstream&gt; </span>
+<span id="L7"><span class="lineNum">       7</span>              : </span>
+<span id="L8"><span class="lineNum">       8</span>              : using namespace std;</span>
+<span id="L9"><span class="lineNum">       9</span>              : </span>
+<span id="L10"><span class="lineNum">      10</span>              : class MyArr {</span>
+<span id="L11"><span class="lineNum">      11</span>              : private:</span>
+<span id="L12"><span class="lineNum">      12</span>              :     string* data;</span>
+<span id="L13"><span class="lineNum">      13</span>              :     int size;</span>
+<span id="L14"><span class="lineNum">      14</span>              :     int capacity;</span>
+<span id="L15"><span class="lineNum">      15</span>              : </span>
+<span id="L16"><span class="lineNum">      16</span>              :     void ensureCapacity(int newSize);</span>
+<span id="L17"><span class="lineNum">      17</span>              : </span>
+<span id="L18"><span class="lineNum">      18</span>              : public:</span>
+<span id="L19"><span class="lineNum">      19</span>              :     MyArr();</span>
+<span id="L20"><span class="lineNum">      20</span>              :     ~MyArr();</span>
+<span id="L21"><span class="lineNum">      21</span>              : </span>
+<span id="L22"><span class="lineNum">      22</span>              :     // Rule of Five: Запрещаем копирование и перемещение</span>
+<span id="L23"><span class="lineNum">      23</span>              :     MyArr(const MyArr&amp;) = delete;</span>
+<span id="L24"><span class="lineNum">      24</span>              :     MyArr&amp; operator=(const MyArr&amp;) = delete;</span>
+<span id="L25"><span class="lineNum">      25</span>              :     MyArr(MyArr&amp;&amp;) = delete;</span>
+<span id="L26"><span class="lineNum">      26</span>              :     MyArr&amp; operator=(MyArr&amp;&amp;) = delete;</span>
+<span id="L27"><span class="lineNum">      27</span>              : </span>
+<span id="L28"><span class="lineNum">      28</span>              :     void addHead(const string&amp; val); // добавление в начало</span>
+<span id="L29"><span class="lineNum">      29</span>              :     void delHead();                   // удаление из начала</span>
+<span id="L30"><span class="lineNum">      30</span>              :     void delEnd();                    // удаление из конца</span>
+<span id="L31"><span class="lineNum">      31</span>              : </span>
+<span id="L32"><span class="lineNum">      32</span>              :     void addEnd(const string&amp; val);</span>
+<span id="L33"><span class="lineNum">      33</span>              :     string getAt(int idx) const;</span>
+<span id="L34"><span class="lineNum">      34</span>              :     void delAt(int idx);</span>
+<span id="L35"><span class="lineNum">      35</span>              :     void readArray() const;</span>
+<span id="L36"><span class="lineNum">      36</span>              :     void addAt(int idx, const string&amp; val);</span>
+<span id="L37"><span class="lineNum">      37</span>              :     void repArr(int idx, const string&amp; val);</span>
+<span id="L38"><span class="lineNum">      38</span>              :     </span>
+<span id="L39"><span class="lineNum">      39</span>              :     // Изменено согласно modernize-use-trailing-return-type</span>
+<span id="L40"><span class="lineNum">      40</span>              :     auto lenArr() const -&gt; int;</span>
+<span id="L41"><span class="lineNum">      41</span>              : </span>
+<span id="L42"><span class="lineNum">      42</span>              :     void saveToFile(const string&amp; filename) const;</span>
+<span id="L43"><span class="lineNum">      43</span>              :     void loadFromFile(const string&amp; filename);</span>
+<span id="L44"><span class="lineNum">      44</span>              : </span>
+<span id="L45"><span class="lineNum">      45</span>              :     // Бинарная</span>
+<span id="L46"><span class="lineNum">      46</span>              :     void saveToBinaryFile(const string&amp; filename) const;</span>
+<span id="L47"><span class="lineNum">      47</span>              :     void loadFromBinaryFile(const string&amp; filename);</span>
+<span id="L48"><span class="lineNum">      48</span>              : </span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC tlaBgGNC">           1 :     string* getData_test() const //хелпер для тестов</span></span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">           1 :     {   return data;</span></span>
+<span id="L51"><span class="lineNum">      51</span>              :     }</span>
+<span id="L52"><span class="lineNum">      52</span>              : };</span>
+<span id="L53"><span class="lineNum">      53</span>              : </span>
+<span id="L54"><span class="lineNum">      54</span>              : #endif</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

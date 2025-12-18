@@ -1,0 +1,1 @@
+/usr/bin/c++  --coverage  --coverage CMakeFiles/prg.dir/main.cpp.o -o prg  libDataStructures.a 

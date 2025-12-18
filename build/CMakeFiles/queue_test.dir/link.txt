@@ -1,0 +1,1 @@
+/usr/bin/c++  --coverage  --coverage CMakeFiles/queue_test.dir/tests/queue_test.cpp.o -o queue_test  libDataStructures.a lib/libgtest.a lib/libgtest_main.a lib/libgtest.a 
